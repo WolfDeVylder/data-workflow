@@ -2,28 +2,28 @@
 
 ## dataBB.sh:
 Het script begint met #!/bin/bash dit is het begin van elk shell script.
-Ik stak de plaats waar het opgeslaan moest staan plus de naam in een variable waar de datum dynamisch ook wordt bij geplaatst.
+Ik stak de plaats waar het opgeslaan moet worden plus de naam in een variable waar de datum dynamisch ook wordt bij geplaatst.
 
-Dan gebruikte ik curl om data te kunnen trekken van een API link van stadgent over blue bike fietsen.
+Dan gebruikte ik curl om data te kunnen trekken van een API link van stad gent over blue bike fietsen.
 Door het commando -o stak ik de output in de variable die ik al had gedefinieerd.
 
 ## csv_convert.sh:
 Het begint met #!/bin/bash.
-Daarna gebruik ik *for* file *in.json;do*, dit betekent dat elke file in de locatie waar ik in zit die einidgt op json, daar wordt het volgende commando op uitgevoerd.
+Daarna gebruik ik *for* file *in.json;do*, dit betekent dat elke file in de locatie waar ik in zit die eindigt op json, daar wordt het volgende commando op uitgevoerd.
 
 Dat volgende commando is jq -r, de -r staat kort voor --raw , dus geen aanhalingstekens in de uitvoer.
 
 Om de headers van de kolommen te krijgen steek ik voor de data de headers in een array die even lang is als het aantal items dat ik wil verzamelen via jq.
-Je moet ervoor ook al eens de json files bekijke met het commando *cat ... .json | jq* zo kan je de structuur zien en hoe je gaat pipen om efficienter te zijn.
+Je moet ervoor ook al eens de json files bekijken met het commando *cat ... .json | jq* zo kan je de structuur zien en hoe je gaat pipen om efficienter te zijn.
 
-.Records[] was het eerst en daarna was elke element dat ik moest hebben(tijd,gebruikte fietsen en ongebruikte fietsen) op het zelfde niveau.
+.Records[] was het eerste en daarna was elke element dat ik moest hebben(tijd,gebruikte fietsen en ongebruikte fietsen) op het zelfde niveau.
 Nu kan ik gewoon de structuur afgaan, omdat de fietsen in gebruik en ongebruikte fietsen nog onder *fields* staan,
 moet je nog eens *.fields* voor de andere zetten zodat je piping werkt.
 
-Erna pipe je weer met *@csv* zodat het omgezet wordt in csv.
+Nadien pipe je weer met *@csv* zodat het omgezet wordt in csv.
 
 Na het commando zie je dat er *$file* staat dus voor elke file gaat zonder problemen in csvdataBB.csv gestoken worden.
-Het is een soort loop.
+Het is een soort loop die je maakt die zich aanpast aan alle json files.
 
 ## dubbelsBB.sh:
 Shell script begint met #!/bin/bash.
@@ -31,9 +31,9 @@ Dan is er een if structuur die controleert of de csvdataBB.csv is aangemaakt of 
 Zoniet dan gooit die een error die weergeeft dat het bestand nog niet bestaat.
 Als het zo zou zijn is er *exit 1* dus dan breekt het script af.
 
-Vervolgens wordt het commando awk gebruikt die lijn per lijn controleert of er niets dubbels is.
-Als er iets dubbel staat dan wordt die niet in het gefilterde bestand gezet.
-Na elke lijn is overlopen overschrijven we het eerste *csvdataBB.csv* met het gefilterde zodat we nu een gefilterde hebben in het zelfde bestand.
+Vervolgens wordt het commando *awk* gebruikt die lijn per lijn controleert of er niets dubbels is.
+Als er iets dubbel staat dan wordt die lijn niet in het gefilterde bestand gezet.
+Na elke lijn is overlopen overschrijven we het eerste *csvdataBB.csv* met het gefilterde zodat we nu een gefilterde hebben in het csvdataBB.csv bestand.
 
 ## graph.py:
 Ik steek het lezen van het csv bestand in een variabele zodat het makkelijker is om te schrijven.
@@ -61,16 +61,16 @@ Voor elke lijn zet hij de *IFS(Internal field seperator)* tot read zodat elke li
 Het gebruikt *sed* om elke komma te vervangen met het piping symbool ( | ) en met spaties langs de zijkanten.
 De pipe symbolen zijn gelijk kolom delimiters.
 
-Het voegt ook ( | ) aan het begin en het einde toe om een soort border te creeeren.
+Het voegt ook ( | ) aan het begin en het einde toe om een soort border te creëeren.
 
 Dan wordt elke lijn in de variabele md_file gestoken.
 
 Als het gedaan is wordt alles terug in de csv_file gestoken en een nieuwe lijn toegevoegd om het goed to formateren en dan terug in de md_file te steken.
 
 ## Makefile:
-Er is all, als je *make all* doet dan voert hij alle scripts uit in volgorde om het csv en md bestand te krijgen.
+Er is een all command die als je *make all* doet dan voert hij alle scripts uit in volgorde om het csv en md bestand te krijgen.
 
-Je kan ook afzonderlijk *make dubbelsBB* doen om enkel dat uit te voeren.
+Je kan ook afzonderlijk *make dubbelsBB* doen om enkel dat script uit te voeren.
 
 De reden dat er bash voor staat is dat het een shell script is en de -o betekent de output erna en dan geef je het een filename dus dan zet je daar gewoon de csvdataBB.csv of .md in.
 
